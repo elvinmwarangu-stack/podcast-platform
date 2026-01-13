@@ -3,48 +3,42 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from typing import Annotated
 
-from .. import crud, schemas
-from ..dependencies import (
-    get_db,
-    authenticate_user,
-    create_access_token,
-    get_password_hash,
-    oauth2_scheme,
-)
+from .. import crud, schemas, utils
+from ..dependencies import get_db, create_access_token, get_current_active_user
 from ..models import User
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/register", response_model=schemas.UserOut)
-def register(
+@router.post("/register", response_model=schemas.UserOut, status_code=201)
+def register_user(
     user_in: schemas.UserCreate,
     db: Session = Depends(get_db),
 ):
-    db_user = crud.get_user_by_email(db, email=user_in.email)
-    if db_user:
-        raise HTTPException(
-            status_code=400, detail="Email already registered"
-        )
-    hashed_password = get_password_hash(user_in.password)
-    user = User(
+    if crud.get_user_by_email(db, user_in.email):
+        raise HTTPException(status_code=400, detail="Email already registered")
+    if crud.get_user_by_username(db, user_in.username):
+        raise HTTPException(status_code=400, detail="Username already taken")
+
+    hashed_password = utils.get_password_hash(user_in.password)
+    db_user = User(
         email=user_in.email,
         username=user_in.username,
         hashed_password=hashed_password,
         full_name=user_in.full_name,
     )
-    db.add(user)
+    db.add(db_user)
     db.commit()
-    db.refresh(user)
-    return user
+    db.refresh(db_user)
+    return db_user
 
 
 @router.post("/login", response_model=schemas.Token)
-def login_for_access_token(
+def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Session = Depends(get_db),
 ):
-    user = authenticate_user(db, form_data.username, form_data.password)
+    user = crud.authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -53,10 +47,3 @@ def login_for_access_token(
         )
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
-
-
-# Optional: simple forgot-password endpoint (you'll need email service later)
-@router.post("/forgot-password")
-def forgot_password(email: str, db: Session = Depends(get_db)):
-    # In real app: generate token, send email
-    return {"message": "If the email exists, a reset link has been sent."}
