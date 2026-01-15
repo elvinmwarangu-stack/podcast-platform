@@ -22,22 +22,24 @@ app = FastAPI(
 # Seed database if empty
 db = SessionLocal()
 try:
-    if db.query(Podcast).count() == 0:
+    podcast_count = db.query(Podcast).count()
+    print(f"Current podcast count: {podcast_count}")
+    if podcast_count == 0:
         print("Database is empty, running seed script...")
         exec(open("seed_data.py").read())
+        print("Seeding completed")
+    else:
+        print("Database already has data, skipping seed")
 except Exception as e:
     print(f"Error seeding database: {e}")
+    import traceback
+    traceback.print_exc()
 finally:
     db.close()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "https://podcast-platform-6bch.vercel.app",
-        "https://*.vercel.app",
-    ],
+    allow_origins=["*"],  # Temporarily allow all origins for testing
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
