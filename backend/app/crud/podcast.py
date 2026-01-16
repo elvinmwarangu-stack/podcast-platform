@@ -22,8 +22,13 @@ def get_podcasts(db, skip=0, limit=20):
 
 
 def create_podcast(db, podcast, owner_id):
+    podcast_data = dict(podcast)
+    # Convert Pydantic Url objects to strings for database compatibility
+    if podcast_data.get('cover_image_url'):
+        podcast_data['cover_image_url'] = str(podcast_data['cover_image_url'])
+    
     db_podcast = models.Podcast(
-        **dict(podcast),
+        **podcast_data,
         owner_id=owner_id,
     )
     db.add(db_podcast)
@@ -38,6 +43,10 @@ def update_podcast(db, podcast_id, podcast_update):
         return None
 
     update_data = dict(podcast_update)
+    # Convert Pydantic Url objects to strings for database compatibility
+    if update_data.get('cover_image_url'):
+        update_data['cover_image_url'] = str(update_data['cover_image_url'])
+    
     for key, value in update_data.items():
         setattr(podcast, key, value)
 
