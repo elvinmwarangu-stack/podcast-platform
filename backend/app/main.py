@@ -42,7 +42,7 @@ finally:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://podcast-platform-6bch.vercel.app",  # Your deployed frontend
+        "https://brians-fullstack.vercel.app",  # Your deployed frontend
         "http://localhost:5174",                      # Local dev (Vite default)
         "http://localhost:3000",                      # Alternative local dev port
     ],
