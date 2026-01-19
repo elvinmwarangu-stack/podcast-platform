@@ -19,7 +19,6 @@ import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    /* Changed bg-gray-900 to bg-black to match the PodWave theme perfectly */
     <div className="min-h-screen bg-black flex flex-col selection:bg-[#39FF14] selection:text-black">
       <Navbar />
       <main className="flex-grow">
@@ -27,7 +26,6 @@ function App() {
           {/* Public Landing Page */}
           <Route path="/" element={<Home />} />
           
-          {/* New Explore Page - Shows the Podcast Grid */}
           <Route path="/explore" element={<Explore />} />
           
           <Route path="/login" element={<Login />} />

@@ -28,14 +28,9 @@ from app.models.user import User
 router = APIRouter(tags=["podcasts"])
 
 
-# -------------------
 # LIST PODCASTS
-# -------------------
 @router.get("/", response_model=List[schemas.PodcastOut])
 def list_podcasts(
-    skip: int = 0,                     # Pagination: number of items to skip
-    limit: int = 20,                    # Pagination: maximum number of items to return
-    db: Session = Depends(get_db),      # Inject database session
 ):
     """
     Returns a list of podcasts with optional pagination.
@@ -43,9 +38,7 @@ def list_podcasts(
     return crud.get_podcasts(db, skip=skip, limit=limit)
 
 
-# -------------------
 # GET PODCAST DETAIL
-# -------------------
 @router.get("/{podcast_id}", response_model=schemas.PodcastOut)
 def get_podcast_detail(
     podcast_id: int,                    # ID of the podcast to retrieve
@@ -61,9 +54,7 @@ def get_podcast_detail(
     return podcast
 
 
-# -------------------
 # CREATE PODCAST
-# -------------------
 @router.post("/", response_model=schemas.PodcastOut, status_code=201)
 def create_podcast(
     podcast_create: schemas.PodcastCreate,                  # Validated input data for creating a podcast
@@ -77,9 +68,7 @@ def create_podcast(
     return crud.create_podcast(db, podcast_create, owner_id=current_user.id)
 
 
-# -------------------
 # UPDATE PODCAST
-# -------------------
 @router.put("/{podcast_id}", response_model=schemas.PodcastOut)
 def update_podcast(
     podcast_id: int,                                        # ID of the podcast to update

@@ -38,7 +38,7 @@ except Exception as e:
 finally:
     db.close()
 
-# --- CORS Middleware ---
+#CORS Middleware 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -51,7 +51,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Routers ---
+#Routers
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 app.include_router(users_router, prefix="/users", tags=["Users"])
 app.include_router(podcasts_router, prefix="/podcasts", tags=["Podcasts"])
@@ -59,7 +59,7 @@ app.include_router(comments_router, prefix="/comments", tags=["Comments"])
 app.include_router(favorites_router, prefix="/favorites", tags=["Favorites"])
 app.include_router(categories_router, prefix="/categories", tags=["Categories"])
 
-# --- Root endpoint ---
+#Root endpoint
 @app.get("/")
 def root():
     return {

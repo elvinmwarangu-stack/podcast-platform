@@ -26,9 +26,7 @@ from app.models.user import User
 router = APIRouter(tags=["comments"])
 
 
-# -------------------
 # GET COMMENTS FOR A PODCAST
-# -------------------
 @router.get("/podcast/{podcast_id}", response_model=List[schemas.CommentOut])
 def get_comments(
     podcast_id: int,           # ID of the podcast to get comments for
@@ -43,9 +41,7 @@ def get_comments(
     return crud.get_comments_by_podcast(db, podcast_id, skip, limit)
 
 
-# -------------------
 # ADD NEW COMMENT
-# -------------------
 @router.post("/", response_model=schemas.CommentOut, status_code=201)
 def add_comment(
     comment: schemas.CommentCreate,                  # Input data for comment creation
@@ -60,9 +56,7 @@ def add_comment(
     return crud.create_comment(db, comment, user_id=current_user.id)
 
 
-# -------------------
 # DELETE COMMENT
-# -------------------
 @router.delete("/{comment_id}")
 def delete_comment(
     comment_id: int,                               # ID of the comment to delete

@@ -26,9 +26,7 @@ from app.models.user import User
 router = APIRouter(tags=["favorites"])
 
 
-# -------------------
 # GET USER FAVORITES
-# -------------------
 @router.get("/", response_model=List[schemas.PodcastOut])
 def get_user_favorites(
     current_user: User = Depends(get_current_active_user),  # Get logged-in user
@@ -43,9 +41,7 @@ def get_user_favorites(
     return crud.get_user_favorite_podcasts(db, current_user.id, skip, limit)
 
 
-# -------------------
 # ADD FAVORITE
-# -------------------
 @router.post("/{podcast_id}")
 def add_favorite(
     podcast_id: int,                                        # ID of the podcast to add to favorites
@@ -63,9 +59,7 @@ def add_favorite(
     return {"message": "Added to favorites"}
 
 
-# -------------------
 # REMOVE FAVORITE
-# -------------------
 @router.delete("/{podcast_id}")
 def remove_favorite(
     podcast_id: int,                                        # ID of the podcast to remove from favorites

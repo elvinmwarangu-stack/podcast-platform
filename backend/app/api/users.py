@@ -23,9 +23,7 @@ from app.models.user import User
 router = APIRouter(tags=["users"])
 
 
-# -------------------
 # GET CURRENT USER
-# -------------------
 @router.get("/me", response_model=schemas.UserOut)
 def read_current_user(
     current_user: User = Depends(get_current_active_user),  # Get logged-in user
@@ -37,9 +35,7 @@ def read_current_user(
     return current_user
 
 
-# -------------------
 # UPDATE CURRENT USER
-# -------------------
 @router.put("/me", response_model=schemas.UserOut)
 def update_current_user(
     user_update: schemas.UserUpdate,                        # Validated input data for updating user
@@ -53,9 +49,7 @@ def update_current_user(
     return crud.update_user(db, current_user.id, user_update)
 
 
-# -------------------
 # RESET CURRENT USER PASSWORD
-# -------------------
 @router.post("/me/reset-password")
 def reset_password(
     password_data: schemas.PasswordReset,                  # Validated input: current and new password

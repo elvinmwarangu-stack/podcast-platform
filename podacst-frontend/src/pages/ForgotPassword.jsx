@@ -8,7 +8,6 @@ export default function ForgotPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Simulated API call - replace with: await authApi.forgotPassword(email);
       setMessage("If email exists, reset link has been sent. Check console for link.");
     } catch (err) {
       setMessage("Error sending reset link");

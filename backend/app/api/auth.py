@@ -12,9 +12,7 @@ from app.models.user import User
 router = APIRouter(tags=["auth"])
 
 
-# -------------------
 # REGISTER USER
-# -------------------
 @router.post("/register", response_model=schemas.UserOut, status_code=201)
 def register_user(
     user_in: schemas.UserCreate,
@@ -42,9 +40,7 @@ def register_user(
     return db_user
 
 
-# -------------------
 # LOGIN USER
-# -------------------
 @router.post("/login", response_model=schemas.Token)
 def login_user(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -57,7 +53,7 @@ def login_user(
             detail="Incorrect username or password",
         )
 
-    # Optional: token expiration time (default 30 minutes)
+    # Token expiration time (default 30 minutes)
     access_token_expires = timedelta(minutes=30)
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires

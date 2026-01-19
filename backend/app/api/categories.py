@@ -24,9 +24,7 @@ from app.dependencies import get_db
 router = APIRouter(tags=["categories"])
 
 
-# -------------------
 # LIST CATEGORIES
-# -------------------
 @router.get("/", response_model=List[schemas_category.CategoryOut])
 def list_categories(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """
@@ -39,9 +37,7 @@ def list_categories(skip: int = 0, limit: int = 100, db: Session = Depends(get_d
     return crud_category.get_categories(db, skip, limit)
 
 
-# -------------------
 # GET SINGLE CATEGORY
-# -------------------
 @router.get("/{category_id}", response_model=schemas_category.CategoryOut)
 def get_category(category_id: int, db: Session = Depends(get_db)):
     """
@@ -57,9 +53,7 @@ def get_category(category_id: int, db: Session = Depends(get_db)):
     return category_obj
 
 
-# -------------------
 # CREATE NEW CATEGORY
-# -------------------
 @router.post("/", response_model=schemas_category.CategoryOut, status_code=201)
 def create_category(category_in: schemas_category.CategoryCreate, db: Session = Depends(get_db)):
     """
