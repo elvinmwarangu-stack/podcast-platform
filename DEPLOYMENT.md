@@ -35,10 +35,18 @@ In your web service settings:
 - `DATABASE_URL` = (paste Internal Database URL)
 - `SECRET_KEY` = (generate random string)
 
-### Step 5: Run Database Setup
+### Step 5: Deploy and Auto-Setup
+1. Push your code to GitHub (Render will auto-deploy)
+2. The application will automatically:
+   - Create database tables
+   - Run migrations (add missing columns)
+   - Seed the database if empty
+3. Monitor the deployment logs to ensure everything completes successfully
+
+### Manual Setup (if needed):
+If auto-setup fails, you can manually run:
 1. Go to your web service → "Shell"
 2. Run: `python3 startup_and_seed.py`
-3. This will run migrations and seed the database in one step
 
 ### Your Backend URL:
 `https://your-app-name.onrender.com`

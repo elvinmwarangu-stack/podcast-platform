@@ -21,6 +21,13 @@ app = FastAPI(
 # --- Create all tables if they don't exist ---
 Base.metadata.create_all(bind=engine)  # ✅ This ensures all models create their tables
 
+# --- Run database migrations if needed ---
+try:
+    print("Running database migrations...")
+    exec(open("migrate_profile_photo.py").read())
+except Exception as e:
+    print(f"Migration error (may already exist): {e}")
+
 # --- Seed database if empty ---
 db = SessionLocal()
 try:
