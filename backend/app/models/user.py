@@ -12,6 +12,7 @@ class User(Base):
     hashed_password = Column(String(255), nullable=False)
     full_name = Column(String(150), nullable=True)
     profile_photo = Column(Text, nullable=True)
+    role = Column(String(50), nullable=False, default="user")
     is_active = Column(Boolean, default=True, nullable=False)
     reset_token = Column(String(255), nullable=True)
     reset_token_expires = Column(DateTime(timezone=True), nullable=True)
