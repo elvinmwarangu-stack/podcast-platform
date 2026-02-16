@@ -25,11 +25,11 @@ Base.metadata.create_all(bind=engine)  # ✅ This ensures all models create thei
 # --- Run database migrations if needed ---
 try:
     print("Running database migrations...")
-    from migrate_profile_photo import migrate_profile_photo
-    migrate_profile_photo()
+    from migrate_all_columns import migrate_all_columns
+    migrate_all_columns()
 except Exception as e:
     print(f"Migration error (may already exist): {e}")
-    # Continue anyway - the column might already exist
+    # Continue anyway - the columns might already exist
 
 # --- Seed database if empty ---
 db = SessionLocal()
