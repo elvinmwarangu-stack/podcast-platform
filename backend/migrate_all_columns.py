@@ -19,6 +19,10 @@ def migrate_all_columns():
             "sql": "ALTER TABLE users ADD COLUMN profile_photo TEXT"
         },
         {
+            "name": "role", 
+            "sql": "ALTER TABLE users ADD COLUMN role VARCHAR(50) NOT NULL DEFAULT 'user'"
+        },
+        {
             "name": "reset_token", 
             "sql": "ALTER TABLE users ADD COLUMN reset_token VARCHAR(255)"
         },
