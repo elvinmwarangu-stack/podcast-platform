@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import SessionLocal, Base, engine  # Import Base and engine
 from app.models import Podcast
+from sqlalchemy import text
 from app.api import (
     auth_router,
     users_router,
@@ -24,9 +25,11 @@ Base.metadata.create_all(bind=engine)  # ✅ This ensures all models create thei
 # --- Run database migrations if needed ---
 try:
     print("Running database migrations...")
-    exec(open("migrate_profile_photo.py").read())
+    from migrate_profile_photo import migrate_profile_photo
+    migrate_profile_photo()
 except Exception as e:
     print(f"Migration error (may already exist): {e}")
+    # Continue anyway - the column might already exist
 
 # --- Seed database if empty ---
 db = SessionLocal()
@@ -71,6 +74,7 @@ app.include_router(categories_router, prefix="/categories", tags=["Categories"])
 def root():
     return {
         "message": "Podcast Platform API",
+        "status": "healthy",
         "routes": {
             "auth": {"register": "POST /auth/register", "login": "POST /auth/login"},
             "users": {"me": "GET /users/me", "update": "PUT /users/me"},
@@ -99,3 +103,23 @@ def root():
             "redoc": "GET /redoc",
         },
     }
+
+@app.get("/health")
+def health_check():
+    """Health check endpoint to verify database connection"""
+    try:
+        db = SessionLocal()
+        # Test database connection
+        db.execute(text("SELECT 1"))
+        db.close()
+        return {
+            "status": "healthy",
+            "database": "connected",
+            "message": "API is running and database is accessible"
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "database": "disconnected",
+            "error": str(e)
+        }
