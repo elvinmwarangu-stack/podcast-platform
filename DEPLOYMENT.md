@@ -1,4 +1,4 @@
-# 🚀 Deployment Guide
+# Deployment Guide
 
 ## Backend (Render)
 
@@ -36,13 +36,15 @@ In your web service settings:
 - `SECRET_KEY` = (generate random string)
 
 ### Step 5: Run Database Migrations
-1. Go to your web service → "Shell"
+1. Go to your web service → 
 2. Run: `python3 migrate_profile_photo.py`
 3. This will add the missing `profile_photo` column to the users table
 
 ### Step 6: Seed Database
 1. In the same shell, run: `python3 seed_data.py`
 2. Done! ✅
+2. Run: `python3 seed_data.py`
+3. Done! 
 
 ### Your Backend URL:
 `https://your-app-name.onrender.com`
@@ -89,7 +91,7 @@ allow_origins=[
 
 ---
 
-## 🎉 Done!
+##  Done!
 
 **Frontend**: https://your-app.vercel.app
 **Backend**: https://your-app-name.onrender.com
