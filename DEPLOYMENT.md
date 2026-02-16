@@ -35,14 +35,10 @@ In your web service settings:
 - `DATABASE_URL` = (paste Internal Database URL)
 - `SECRET_KEY` = (generate random string)
 
-### Step 5: Run Database Migrations
+### Step 5: Run Database Setup
 1. Go to your web service → "Shell"
-2. Run: `python3 migrate_profile_photo.py`
-3. This will add the missing `profile_photo` column to the users table
-
-### Step 6: Seed Database
-1. In the same shell, run: `python3 seed_data.py`
-2. Done! ✅
+2. Run: `python3 startup_and_seed.py`
+3. This will run migrations and seed the database in one step
 
 ### Your Backend URL:
 `https://your-app-name.onrender.com`
