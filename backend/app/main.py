@@ -22,13 +22,20 @@ app = FastAPI(
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: Create tables and seed data
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    
     try:
         Base.metadata.create_all(bind=engine)
         print("✅ Database tables created successfully")
         
         # Run seed data
-        import seed_data
-        print("✅ Database seeded successfully")
+        try:
+            import seed_data
+            print("✅ Database seeded successfully")
+        except Exception as seed_err:
+            print(f"⚠️  Seed error: {seed_err}")
     except Exception as e:
         print(f"⚠️  Startup warning: {e}")
     
