@@ -30,7 +30,8 @@ except Exception as e:
 # Skip migrations on startup to avoid issues - run manually if needed
 # Migration is now handled separately via startup_and_seed.py or manually
 
-#CORS Middleware 
+#CORS Middleware
+# Updated: seed data will be added on deployment 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
