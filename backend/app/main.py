@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from app.database import SessionLocal, Base, engine  # Import Base and engine
 from app.models import Podcast
 from sqlalchemy import text
@@ -18,6 +19,29 @@ app = FastAPI(
     version="0.1.0"
 )
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Create tables and seed data
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables created successfully")
+        
+        # Run seed data
+        import seed_data
+        print("✅ Database seeded successfully")
+    except Exception as e:
+        print(f"⚠️  Startup warning: {e}")
+    
+    yield  # Application runs here
+    # Shutdown: cleanup if needed
+
+app = FastAPI(
+    title="Podcast Platform API",
+    description="Backend API for Podcast / Audio Content Platform",
+    version="0.1.0",
+    lifespan=lifespan
+)
+
 # --- Create all tables if they don't exist ---
 try:
     Base.metadata.create_all(bind=engine)  # ✅ This ensures all models create their tables
@@ -25,10 +49,6 @@ try:
 except Exception as e:
     print(f"⚠️  Database table creation warning: {e}")
     print("   This may be expected if database is not yet available")
-
-# --- Run database migrations if needed ---
-# Skip migrations on startup to avoid issues - run manually if needed
-# Migration is now handled separately via startup_and_seed.py or manually
 
 #CORS Middleware
 # Updated: seed data will be added on deployment 
