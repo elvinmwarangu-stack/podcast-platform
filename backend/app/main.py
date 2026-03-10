@@ -35,6 +35,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://brians-fullstack.vercel.app",  # Deployed frontend
+        "https://podcast-platform.onrender.com",  # Deployed backend
+        "https://podcast-platform-imt7.onrender.com",  # Deployed backend alternative
         "http://localhost:5173",                # Local Vite dev
         "http://localhost:3000",                # Alternative local dev
     ],
