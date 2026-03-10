@@ -35,6 +35,7 @@ def seed_database():
 def main():
     """Run migrations and seeding."""
     print("🚀 Starting database setup...")
+    print("📁 Current directory:", __file__)
     
     # Run migrations first
     if not run_migrations():
