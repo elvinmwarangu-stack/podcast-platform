@@ -11,7 +11,6 @@ from app.api import (
     favorites_router,
     categories_router,
 )
-import traceback
 
 app = FastAPI(
     title="Podcast Platform API",
@@ -20,33 +19,16 @@ app = FastAPI(
 )
 
 # --- Create all tables if they don't exist ---
-Base.metadata.create_all(bind=engine)  # ✅ This ensures all models create their tables
+try:
+    Base.metadata.create_all(bind=engine)  # ✅ This ensures all models create their tables
+    print("✅ Database tables created successfully")
+except Exception as e:
+    print(f"⚠️  Database table creation warning: {e}")
+    print("   This may be expected if database is not yet available")
 
 # --- Run database migrations if needed ---
-try:
-    print("Running database migrations...")
-    from migrate_all_columns import migrate_all_columns
-    migrate_all_columns()
-except Exception as e:
-    print(f"Migration error (may already exist): {e}")
-    # Continue anyway - the columns might already exist
-
-# --- Seed database if empty ---
-db = SessionLocal()
-try:
-    podcast_count = db.query(Podcast).count()
-    print(f"Current podcast count: {podcast_count}")
-    if podcast_count == 0:
-        print("Database is empty, running seed script...")
-        exec(open("seed_data.py").read())
-        print("Seeding completed")
-    else:
-        print("Database already has data, skipping seed")
-except Exception as e:
-    print(f"Error seeding database: {e}")
-    traceback.print_exc()
-finally:
-    db.close()
+# Skip migrations on startup to avoid issues - run manually if needed
+# Migration is now handled separately via startup_and_seed.py or manually
 
 #CORS Middleware 
 app.add_middleware(

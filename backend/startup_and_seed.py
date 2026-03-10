@@ -11,8 +11,8 @@ def run_migrations():
     """Run database migrations."""
     try:
         print("🔄 Running database migrations...")
-        from migrate_profile_photo import migrate_profile_photo
-        success = migrate_profile_photo()
+        from migrate_all_columns import migrate_all_columns
+        success = migrate_all_columns()
         if not success:
             return False
         print("✅ Migrations completed successfully")
