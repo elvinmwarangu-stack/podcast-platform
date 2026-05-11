@@ -36,6 +36,19 @@ def migrate_all_columns():
         with engine.connect() as connection:
             # Start a transaction
             with connection.begin():
+                # Check if users table exists first
+                result = connection.execute(text("""
+                    SELECT EXISTS (
+                        SELECT FROM information_schema.tables 
+                        WHERE table_name = 'users'
+                    )
+                """))
+                table_exists = result.scalar()
+                
+                if not table_exists:
+                    print("⚠️  Users table doesn't exist yet. Skipping migrations.")
+                    return True
+                
                 # Get existing columns
                 result = connection.execute(text("""
                     SELECT column_name 

@@ -7,6 +7,19 @@ This ensures the database schema is up to date before seeding.
 import sys
 sys.path.append('.')
 
+def create_tables():
+    """Create database tables from models."""
+    try:
+        print("🏗️  Creating database tables...")
+        from app.database import Base, engine
+        from app.models import User, Category, Podcast, Comment, Favorite  # Import all models to ensure they're registered
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables created successfully")
+        return True
+    except Exception as e:
+        print(f"❌ Table creation failed: {e}")
+        return False
+
 def run_migrations():
     """Run database migrations."""
     try:
@@ -33,11 +46,16 @@ def seed_database():
         return False
 
 def main():
-    """Run migrations and seeding."""
+    """Run table creation, migrations and seeding."""
     print("🚀 Starting database setup...")
     print("📁 Current directory:", __file__)
     
-    # Run migrations first
+    # Create tables first
+    if not create_tables():
+        print("❌ Failed to create tables. Exiting.")
+        sys.exit(1)
+    
+    # Run migrations after tables exist
     if not run_migrations():
         print("❌ Failed to run migrations. Exiting.")
         sys.exit(1)
